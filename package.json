@@ -1,0 +1,36 @@
+{
+  "name": "CheatSheet",
+  "version": "1.0.0",
+  "description": "My phenomenal Nuxt.js project",
+  "author": "lamha",
+  "private": true,
+  "scripts": {
+    "dev": "nuxt",
+    "build": "nuxt build",
+    "start": "nuxt start",
+    "generate": "nuxt generate"
+  },
+  "dependencies": {
+    "@ckeditor/ckeditor5-build-decoupled-document": "^19.0.2",
+    "@ckeditor/ckeditor5-code-block": "^19.0.1",
+    "@ckeditor/ckeditor5-vue": "^1.0.1",
+    "@nuxtjs/axios": "^5.3.6",
+    "@nuxtjs/pwa": "^3.0.0-0",
+    "lodash": "latest",
+    "masonry-layout": "^4.2.2",
+    "nuxt": "^2.0.0",
+    "nuxt-buefy": "^0.3.2",
+    "tiptap": "^1.27.1",
+    "tiptap-extensions": "^1.29.1",
+    "vue": "latest",
+    "vue-color": "^2.7.1",
+      "dotenv": "latest"
+  },
+  "devDependencies": {
+    "@nuxtjs/dotenv": "^1.4.1",
+    "cookie-universal-nuxt": "^2.1.4",
+    "cookieparser": "^0.1.0",
+    "node-sass": "^4.14.1",
+    "sass-loader": "^8.0.2"
+  }
+}
