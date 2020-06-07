@@ -6,6 +6,7 @@ export default {
     ** Headers of the page
     */
     head: {
+        titleTemplate: '%s - CheatSheetMaker.com',
         title: process.env.npm_package_name || '',
         meta: [
             {charset: 'utf-8'},
@@ -16,7 +17,7 @@ export default {
             {rel: 'icon', type: 'image/x-icon', href: '/favicon.ico'}
         ],
         script: [
-            { src: 'https://unpkg.com/masonry-layout@4/dist/masonry.pkgd.min.js' }
+            {src: 'https://unpkg.com/masonry-layout@4/dist/masonry.pkgd.min.js'}
         ],
     },
     /*

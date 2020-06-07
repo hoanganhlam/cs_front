@@ -15,7 +15,7 @@
                 <div class="columns is-multiline" v-bind:class="{'full' : setting.column === 12}"
                      v-for="(row, i) in data.rows" :key="i">
                     <div :class="`column is-${setting.column}`" v-html="row.label"></div>
-                    <div class="column" v-html="row.value"></div>
+                    <div :class="`column`" v-html="row.value"></div>
                 </div>
             </div>
         </div>
@@ -63,7 +63,6 @@
 
 <style lang="scss">
     .cheat-sheet {
-        font-size: 14px;
         position: relative;
         box-shadow: none;
         border: 1px solid rgba(81, 86, 88, 0.12941);
@@ -135,6 +134,7 @@
         .content pre {
             overflow-x: unset;
             white-space: break-spaces;
+            word-break: break-all;
         }
 
         .content ul:not(:last-child),

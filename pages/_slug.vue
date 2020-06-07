@@ -3,27 +3,35 @@
         <div class="container">
             <div class="cheat-sheets">
                 <div class="sheet-header">
-                    <ce :editable="updating" elm="h1" class="title" v-model="data.title"></ce>
-                    <client-only v-if="updating">
-                        <editor v-model="data.description"></editor>
-                    </client-only>
-                    <div v-else v-html="data.description"></div>
-                    <b-field v-if="updating">
-                        <b-taginput
-                            v-model="data.taxonomies"
-                            :data="taxonomy.results"
-                            autocomplete
-                            :allow-new="true"
-                            field="title"
-                            icon="label"
-                            placeholder="Add Tag"
-                            :before-adding="beforeAdding"
-                            @add="onAdd"
-                            @typing="getQuerySet">
-                            <template slot-scope="props">{{props.option.title}}</template>
-                            <template slot="empty">got zero result</template>
-                        </b-taginput>
-                    </b-field>
+                    <div class="media">
+                        <div class="media-left">
+                            <Avatar :can-update="updating" class="is-128x128" v-model="data.media"></Avatar>
+                        </div>
+                        <div class="media-content">
+                            <ce :editable="updating" elm="h1" class="title" v-model="data.title"></ce>
+                            <client-only v-if="updating">
+                                <editor v-model="data.description"></editor>
+                            </client-only>
+                            <div v-else v-html="data.description"></div>
+                            <b-field v-if="updating">
+                                <b-taginput
+                                    v-model="data.taxonomies"
+                                    :data="taxonomy.results"
+                                    autocomplete
+                                    :allow-new="true"
+                                    field="title"
+                                    icon="label"
+                                    placeholder="Add Tag"
+                                    :before-adding="beforeAdding"
+                                    @add="onAdd"
+                                    @typing="getQuerySet">
+                                    <template slot-scope="props">{{props.option.title}}</template>
+                                    <template slot="empty">got zero result</template>
+                                </b-taginput>
+                            </b-field>
+                            <p>by <b>{{convertName(data.user)}}</b></p>
+                        </div>
+                    </div>
                 </div>
                 <div class="sheet-body">
                     <div class="columns is-multiline grid">
@@ -87,6 +95,7 @@
     import StyleOption from "../components/StyleOption";
     import SheetForm from "../components/SheetForm";
     import CheatCard from "../components/CheatCard";
+    import Avatar from "../components/Avatar";
     import {cloneDeep, debounce} from "lodash";
 
     const DEFAULT_SETTINGS = {
@@ -119,7 +128,8 @@
         components: {
             StyleOption,
             SheetForm,
-            CheatCard
+            CheatCard,
+            Avatar
         },
         async asyncData({$axios, params}) {
             let data = DEFAULT;
@@ -135,7 +145,7 @@
         },
         head() {
             return {
-                title: 'Cheat Sheet Maker',
+                title: this.$route.params.slug === 'editor' ? 'Editor' : this.data.title,
                 link: this.links
             }
         },
@@ -184,6 +194,7 @@
             },
             async save() {
                 let data = cloneDeep(this.data);
+                data.media = data.media ? data.media.id : undefined;
                 data.taxonomies = data.taxonomies ? data.taxonomies.map(x => x.id) : [];
                 if (this.data.id) {
                     await this.$axios.$put(`/sheet/cheat-sheets/${this.data.slug}/`, data);
@@ -202,6 +213,9 @@
                 }
             },
             beforeAdding(tag) {
+                if (this.data.taxonomies === null) {
+                    this.data.taxonomies = []
+                }
                 let check = this.data.taxonomies.map(x => x.id).indexOf(tag.id);
                 return check === -1;
             },
@@ -283,14 +297,9 @@
         flex-direction: column;
         font-family: var(--font-family);
 
-        .sheet-body,
-        .sheet-header,
-        .sheet-footer {
-            padding: 1rem 1.5rem;
-        }
-
         .sheet-footer,
         .sheet-header {
+            padding: 1rem 1.5rem;
             flex: 0;
             background: var(--header-bg-color);
             color: var(--header-txt-color);
@@ -307,6 +316,7 @@
         .sheet-body {
             flex: 1;
             color: var(--body-text-color);
+            padding: 1.5rem;
 
             .card {
                 color: inherit;
