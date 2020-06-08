@@ -7,7 +7,7 @@
                     quick reference.</p>
             </div>
         </div>
-        <div class="section large has-background-light">
+        <div class="section large has-background-light" style="padding-top: 1.5rem">
             <div class="container">
                 <div class="columns is-multiline">
                     <div class="column is-4" v-for="tag in hash_tag.results" :key="tag.id">
@@ -18,7 +18,12 @@
                             <div class="card-content">
                                 <ul>
                                     <li v-for="sheet in tag.sheets" :key="sheet.id">
-                                        <n-link :to="`/${sheet.slug}`">{{sheet.title}}</n-link>
+                                        <div class="media">
+                                            <div class="media-left"></div>
+                                            <div class="media-content">
+                                                <n-link :to="`/${sheet.slug}`">{{sheet.title}}</n-link>
+                                            </div>
+                                        </div>
                                     </li>
                                 </ul>
                             </div>
@@ -41,7 +46,7 @@
         },
         created() {
             this.hash_tag.results.forEach(tag => {
-                tag.sheets = this.sheet.results.filter(x => x.taxonomies.includes(x.id))
+                tag.sheets = this.sheet.results.filter(x => x.taxonomies.includes(tag.id))
             })
         }
     }

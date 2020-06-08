@@ -199,7 +199,8 @@
                 if (this.data.id) {
                     await this.$axios.$put(`/sheet/cheat-sheets/${this.data.slug}/`, data);
                 } else {
-                    await this.$axios.$post(`/sheet/cheat-sheets/`, data);
+                    let res = await this.$axios.$post(`/sheet/cheat-sheets/`, data);
+                    this.$router.replace({path: '/' + res.slug});
                 }
                 this.updating = false;
             },
@@ -324,7 +325,7 @@
         }
 
         .columns:not(:last-child) {
-            margin-bottom: 1rem;
+            margin-bottom: .5rem;
         }
     }
 
