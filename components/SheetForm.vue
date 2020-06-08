@@ -4,19 +4,15 @@
             <div class="modal-card-title">
                 <ce elm="h1" class="title is-4" v-model="data.title" placeholder="Sheet title"></ce>
             </div>
+            <div class="modal-card-icon">
+                <div class="button is-text" @click="addRow">Add</div>
+            </div>
         </header>
         <section class="modal-card-body">
             <b-field label-position="on-border" label="Description">
                 <editor v-model="data.description"></editor>
             </b-field>
-            <div class="level is-mobile">
-                <div class="level-left">
-                    <h4 class="title is-6">Rows</h4>
-                </div>
-                <div class="level-right">
-                    <div class="button is-text" @click="addRow">Add</div>
-                </div>
-            </div>
+            <h4 class="title is-6">Rows</h4>
             <div class="data-elm" v-for="(row, i) in data.rows" :key="i">
                 <b-field label-position="on-border" label="Label">
                     <editor :value="row.label" @input="row.label = $event"/>

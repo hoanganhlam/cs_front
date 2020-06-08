@@ -82,7 +82,7 @@
             "--body-text-color": "#cd2653",
         },
         general: {
-            column: 2,
+            column: 3,
             sheetColumn: 12,
             font: null
         }
