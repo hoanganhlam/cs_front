@@ -34,7 +34,7 @@
                     </div>
                 </div>
                 <div class="sheet-body">
-                    <div class="columns is-multiline grid">
+                    <div class="columns is-variable is-2 is-multiline grid">
                         <div :class="`sheet column is-${12 / data.settings.general.column}`"
                              v-for="(sheet, i) in data.sheets"
                              :key="sheet.id">
@@ -300,7 +300,7 @@
 
         .sheet-footer,
         .sheet-header {
-            padding: 1rem 1.5rem;
+            padding: 1rem 1rem;
             flex: 0;
             background: var(--header-bg-color);
             color: var(--header-txt-color);
@@ -317,7 +317,7 @@
         .sheet-body {
             flex: 1;
             color: var(--body-text-color);
-            padding: 1.5rem;
+            padding: 1.5rem 1rem;
 
             .card {
                 color: inherit;
@@ -325,7 +325,7 @@
         }
 
         .columns:not(:last-child) {
-            margin-bottom: .5rem;
+            margin-bottom: .5rem!important;
         }
     }
 

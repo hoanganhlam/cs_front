@@ -60,3 +60,16 @@ body {
 .column {
     width: 100%;
 }
+
+
+.columns.is-variable .column {
+    padding-bottom: var(--columnGap);
+    padding-top: var(--columnGap);
+
+    .columns {
+        .column {
+            padding-left: .5rem;
+            padding-right: .5rem;
+        }
+    }
+}

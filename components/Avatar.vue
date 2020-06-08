@@ -2,7 +2,7 @@
     <div class="image avatar relative" v-bind:class="{'initials': !isUpdating && !(data && data.sizes)}">
         <Upload v-if="isUpdating" class="upload" @done="handleUpload"></Upload>
         <img class="is-round" v-else-if="data && data.sizes"
-             :src="cleanURI(data.sizes['thumb_128_128'] ? data.sizes['thumb_128_128'] : data.path)" alt="">
+             :src="cleanURI(data.sizes[size] ? data.sizes[size] : data.path)" alt="">
         <span v-else-if="name">{{avatarName(name, 2)}}</span>
         <b-icon v-else :icon="icon"></b-icon>
         <div v-if="canUpdate" class="medal" @click="isUpdating = !isUpdating">
@@ -35,6 +35,9 @@
             icon: {
                 default: 'account-circle-outline',
                 type: String
+            },
+            size: {
+                default: 'thumb_128_128'
             }
         },
         data() {
