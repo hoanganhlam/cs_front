@@ -7,10 +7,10 @@
             <template slot="end">
                 <b-navbar-item tag="div">
                     <div class="buttons" v-if="!currentUser">
-                        <div class="button is-small is-primary" @click="open(true)">
+                        <div class="button is-primary" @click="open(true)">
                             <strong>Sign up</strong>
                         </div>
-                        <div class="button is-small" @click="open(false)">
+                        <div class="button" @click="open(false)">
                             <strong>Sign in</strong>
                         </div>
                     </div>

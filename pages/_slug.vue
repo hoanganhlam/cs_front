@@ -5,10 +5,10 @@
                 <div class="sheet-header">
                     <div class="media">
                         <div class="media-left">
-                            <Avatar :can-update="updating" class="is-128x128" v-model="data.media"></Avatar>
+                            <Avatar :can-update="updating" class="is-96x96" v-model="data.media"></Avatar>
                         </div>
                         <div class="media-content">
-                            <ce :editable="updating" elm="h1" class="title" v-model="data.title"></ce>
+                            <ce :editable="updating" elm="h1" class="title is-4" v-model="data.title"></ce>
                             <client-only v-if="updating">
                                 <editor v-model="data.description"></editor>
                             </client-only>
