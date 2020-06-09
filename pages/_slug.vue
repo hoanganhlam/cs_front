@@ -45,7 +45,14 @@
                     </div>
                 </div>
                 <div class="sheet-footer">
-                    <p>© CheatSheetMaker.com</p>
+                    <div class="level is-mobile">
+                        <div class="level-left">
+                            <a href="https://cheatsheetmaker.com">CheatSheetMaker.com</a>
+                        </div>
+                        <div class="level-left">
+                            <a href="https://simplecheatsheet.com/">SimpleCheatSheet.com</a>
+                        </div>
+                    </div>
                 </div>
                 <div class="fixed-sidebar">
                     <div class="buttons">
@@ -305,6 +312,10 @@
             background: var(--header-bg-color);
             color: var(--header-txt-color);
 
+            a {
+                color: var(--header-txt-color);
+            }
+
             .title {
                 color: var(--header-txt-color);
             }
@@ -325,7 +336,7 @@
         }
 
         .columns:not(:last-child) {
-            margin-bottom: .5rem!important;
+            margin-bottom: .5rem !important;
         }
     }
 
