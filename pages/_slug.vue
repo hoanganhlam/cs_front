@@ -11,7 +11,7 @@
         <div class="section">
             <div class="container">
                 <div class="columns grid is-multiline">
-                    <div class="column sheet is-4" v-for="sheet in data.sheets" :key="sheet.id">
+                    <div class="column sheet is-6" v-for="sheet in data.sheets" :key="sheet.id">
                         <CheatCard :value="sheet"></CheatCard>
                     </div>
                 </div>

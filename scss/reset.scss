@@ -53,6 +53,10 @@ pre {
         font-size: 15px;
         color: #595959;
         background-color: #fbfbfb;
+
+        &:not(:last-child) {
+            border-bottom: 1px solid #eae7ed;
+        }
     }
 
     .card-header {
@@ -69,6 +73,14 @@ pre {
 
     .description {
         margin-bottom: .75rem;
+    }
+
+    .column {
+        overflow: auto;
+    }
+
+    .card {
+        border: 0;
     }
 }
 
