@@ -1,101 +1,23 @@
 <template>
-    <section class="section has-background-light" v-bind:style="style">
-        <div class="container">
-            <div class="cheat-sheets">
-                <div class="sheet-header">
-                    <div class="media">
-                        <div class="media-left">
-                            <Avatar :can-update="updating" class="is-96x96" v-model="data.media"></Avatar>
-                        </div>
-                        <div class="media-content">
-                            <ce :editable="updating" elm="h1" class="title is-4" v-model="data.title"></ce>
-                            <client-only v-if="updating">
-                                <editor v-model="data.description"></editor>
-                            </client-only>
-                            <div v-else v-html="data.description"></div>
-                            <b-field v-if="updating">
-                                <b-taginput
-                                    v-model="data.taxonomies"
-                                    :data="taxonomy.results"
-                                    autocomplete
-                                    :allow-new="true"
-                                    field="title"
-                                    icon="label"
-                                    placeholder="Add Tag"
-                                    :before-adding="beforeAdding"
-                                    @add="onAdd"
-                                    @typing="getQuerySet">
-                                    <template slot-scope="props">{{props.option.title}}</template>
-                                    <template slot="empty">got zero result</template>
-                                </b-taginput>
-                            </b-field>
-                            <p>by <b>{{convertName(data.user)}}</b></p>
-                        </div>
-                    </div>
+    <div v-bind:style="style">
+        <div class="hero has-text-centered is-dark">
+            <div class="hero-body">
+                <div class="container">
+                    <h1 class="title is-1">{{data.title}}</h1>
+                    <div class="subtitle" v-html="data.description"></div>
                 </div>
-                <div class="sheet-body">
-                    <div class="columns is-variable is-2 is-multiline grid">
-                        <div :class="`sheet column is-${12 / data.settings.general.column}`"
-                             v-for="(sheet, i) in data.sheets"
-                             :key="sheet.id">
-                            <CheatCard :value="sheet" :updating="updating" @opened="openSheet(sheet)"
-                                       :setting="setting"
-                                       @input="sheet = $event"/>
-                        </div>
-                    </div>
-                </div>
-                <div class="sheet-footer">
-                    <div class="level is-mobile">
-                        <div class="level-left">
-                            <a href="https://cheatsheetmaker.com">CheatSheetMaker.com</a>
-                        </div>
-                        <div class="level-left">
-                            <a href="https://simplecheatsheet.com/">SimpleCheatSheet.com</a>
-                        </div>
-                    </div>
-                </div>
-                <div class="fixed-sidebar">
-                    <div class="buttons">
-                        <div class="button is-text" @click="updating = !updating">
-                            <b-icon size="is-small" :icon="updating ? 'eye' : 'pen'"></b-icon>
-                            <span v-if="textBar">{{updating ? 'View' : 'Update'}}</span>
-                        </div>
-                        <div v-if="updating" class="button is-text" @click="showStyleOption = !showStyleOption">
-                            <b-icon size="is-small" icon="tune"></b-icon>
-                            <span v-if="textBar">Custom</span>
-                        </div>
-                        <div v-if="updating" class="button is-text" @click="addSheet">
-                            <b-icon size="is-small" icon="plus"></b-icon>
-                            <span v-if="textBar">Add</span>
-                        </div>
-                        <div v-if="!updating" class="button is-text">
-                            <b-icon size="is-small" icon="cloud-download"></b-icon>
-                            <span v-if="textBar">Download</span>
-                        </div>
-                        <div v-else class="button is-text" @click="save()">
-                            <b-icon size="is-small" icon="content-save"></b-icon>
-                            <span v-if="textBar">Save</span>
-                        </div>
+            </div>
+        </div>
+        <div class="section">
+            <div class="container">
+                <div class="columns grid is-multiline">
+                    <div class="column sheet is-4" v-for="sheet in data.sheets" :key="sheet.id">
+                        <CheatCard :value="sheet"></CheatCard>
                     </div>
                 </div>
             </div>
         </div>
-        <b-modal :active.sync="active"
-                 has-modal-card
-                 trap-focus
-                 :destroy-on-hide="false"
-                 aria-role="dialog"
-                 aria-modal>
-            <client-only>
-                <SheetForm @done="active = false" v-model="activeSheet"/>
-            </client-only>
-        </b-modal>
-        <div class="style-editor" v-if="showStyleOption">
-            <client-only>
-                <StyleOption v-model="data.settings"/>
-            </client-only>
-        </div>
-    </section>
+    </div>
 </template>
 
 <script>
@@ -116,11 +38,6 @@
             sheetColumn: 12,
             font: 'BlinkMacSystemFont, -apple-system, "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue", "Helvetica", "Arial", sans-serif'
         }
-    };
-    const DEFAULT_SHEET = {
-        title: null,
-        description: null,
-        rows: []
     };
     const DEFAULT = {
         title: 'Cheat Sheet Name',
@@ -152,8 +69,7 @@
         },
         head() {
             return {
-                title: this.$route.params.slug === 'editor' ? 'Editor' : this.data.title,
-                link: this.links
+                title: this.$route.params.slug === 'editor' ? 'Editor' : this.data.title
             }
         },
         data() {
@@ -163,20 +79,6 @@
                 active: false,
                 activeSheet: null,
                 textBar: false,
-                fonts: [
-                    {
-                        name: 'Open Sans',
-                        uri: 'Open+Sans:ital,wght@0,300;0,400;0,600;0,700;1,300;1,400;1,600'
-                    },
-                    {
-                        name: 'Ubuntu',
-                        uri: 'Ubuntu:ital,wght@0,300;0,400;1,300;1,400&'
-                    },
-                    {
-                        name: 'SegoeUI',
-                        uri: null
-                    }
-                ],
                 taxonomy: {
                     results: []
                 }
@@ -189,16 +91,6 @@
                     itemSelector: '.column.sheet'
                 });
             },
-            addSheet() {
-                this.data.sheets.push({
-                    id: this.generateId(),
-                    ...cloneDeep(DEFAULT_SHEET)
-                });
-            },
-            openSheet(sheet) {
-                this.active = true;
-                this.activeSheet = sheet;
-            },
             async save() {
                 let data = cloneDeep(this.data);
                 data.media = data.media ? data.media.id : undefined;
@@ -210,22 +102,6 @@
                     this.$router.replace({path: '/' + res.slug});
                 }
                 this.updating = false;
-            },
-            async onAdd(e) {
-                if (typeof e === 'string' && e.length > 3) {
-                    let res = await this.$axios.$post('/general/hash-tags/', {title: e});
-                    if (res.id) {
-                        this.data.taxonomies[this.data.taxonomies.indexOf(e)] = res;
-                        this.taxonomy.results.push(res);
-                    }
-                }
-            },
-            beforeAdding(tag) {
-                if (this.data.taxonomies === null) {
-                    this.data.taxonomies = []
-                }
-                let check = this.data.taxonomies.map(x => x.id).indexOf(tag.id);
-                return check === -1;
             },
             getQuerySet: debounce(function (text) {
                 this.$axios.$get('/general/hash-tags/', {
@@ -244,117 +120,23 @@
                     column: this.data.settings.general.sheetColumn
                 }
             },
-            links() {
-                let out = [];
-                this.fonts.forEach(font => {
-                    if (font.uri) {
-                        out.push(
-                            {
-                                rel: 'stylesheet',
-                                href: `https://fonts.googleapis.com/css?family=${font.uri}&display=swap`
-                            }
-                        )
-                    }
-                });
-                return out;
-            },
             style() {
                 return {
                     "--header-bg-color": this.data.settings.color["--header-bg-color"] || DEFAULT_SETTINGS.color["--header-bg-color"],
                     "--header-txt-color": this.data.settings.color["--header-txt-color"] || DEFAULT_SETTINGS.color["--header-txt-color"],
                     "--body-text-color": this.data.settings.color["--body-text-color"] || DEFAULT_SETTINGS.color["--body-text-color"],
-                    "--font-family": this.data.settings.general.font || DEFAULT_SETTINGS.general.font
                 }
             }
         },
         mounted() {
-            this.reLayout();
+            if (process.client) {
+                let _this = this;
+                setTimeout(function () {
+                    _this.reLayout();
+                }, 50)
+            }
         }
     }
 </script>
 <style lang="scss">
-    .style-editor {
-        width: 250px;
-        position: fixed;
-        top: 25%;
-    }
-
-    .fixed-sidebar {
-        position: fixed;
-        width: 50px;
-        top: 25% x;
-        right: 1rem;
-
-        .buttons {
-            width: fit-content;
-        }
-
-        .button {
-            text-decoration: none;
-            margin-bottom: 0;
-            justify-content: left;
-        }
-    }
-
-    .cheat-sheets {
-        min-height: calc(100vh - 5.5rem);
-        position: relative;
-        background: #ffffff;
-        box-shadow: 0 3px 3px 1px rgba(10, 10, 10, 0.1), 0 0 0 0px rgba(10, 10, 10, 0.1);;
-        display: flex;
-        flex-direction: column;
-        font-family: var(--font-family);
-
-        .sheet-footer,
-        .sheet-header {
-            padding: 1rem 1rem;
-            flex: 0;
-            background: var(--header-bg-color);
-            color: var(--header-txt-color);
-
-            a {
-                color: var(--header-txt-color);
-            }
-
-            .title {
-                color: var(--header-txt-color);
-            }
-
-            .title:not(:last-child) {
-                margin-bottom: .5rem;
-            }
-        }
-
-        .sheet-body {
-            flex: 1;
-            color: var(--body-text-color);
-            padding: 1.5rem 1rem;
-
-            .card {
-                color: inherit;
-            }
-        }
-
-        .columns:not(:last-child) {
-            margin-bottom: .5rem !important;
-        }
-    }
-
-    .has-border,
-    pre,
-    .ck.ck-editor__editable_inline {
-        border: 1px solid #51565821;
-    }
-
-    .has-border {
-        padding: .5rem;
-    }
-
-    .modal-card {
-        min-width: 450px;
-    }
-
-    .b-slider .b-slider-thumb-wrapper {
-        z-index: 99;
-    }
 </style>

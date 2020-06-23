@@ -1,17 +1,30 @@
 <template>
     <div class="is-fullheight">
-        <div class="section">
-            <div class="container">
-                <h1 class="title">Cheat Sheet Maker</h1>
-                <p class="subtitle">A cheat sheet (also cheatsheet) or crib sheet is a concise set of notes used for
-                    quick reference.</p>
+        <div class="hero is-dark">
+            <div class="hero-body">
+                <div class="container">
+                    <h1 class="title is-1">Cheat Sheet Maker</h1>
+                    <p class="subtitle">A cheat sheet (also cheatsheet) or crib sheet is a concise set of notes used for
+                        quick reference.</p>
+                </div>
             </div>
         </div>
-        <div class="section large has-background-light" style="padding-top: 1.5rem">
+        <div class="section large" style="padding-top: 1.5rem">
             <div class="container">
-                <div class="columns is-variable is-1 grid is-multiline">
-                    <div class="column is-4" v-for="tag in hash_tag.results" :key="tag.id">
+                <div class="columns">
+                    <div class="column is-2" v-for="(cs, index) in six" :key="cs.id">
                         <div class="card">
+                            <div class="card-content">
+                                <n-link :to="`/${cs.slug}`">
+                                    <avatar size="thumb_128_128" :value="cs.media" class="is-96x96"/>
+                                </n-link>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="columns grid is-multiline">
+                    <div class="column is-4" v-for="tag in hash_tag.results" :key="tag.id">
+                        <div class="card cheat-sheet">
                             <div class="card-header">
                                 <div class="card-header-title">{{tag.title}}</div>
                             </div>
@@ -48,6 +61,11 @@
             return {
                 sheet: await ctx.$axios.$get('/sheet/cheat-sheets/'),
                 hash_tag: await ctx.$axios.$get('/general/hash-tags/', {params: {page_size: 200}}),
+            }
+        },
+        computed: {
+            six() {
+                return this.sheet.slice(0, 6)
             }
         },
         created() {

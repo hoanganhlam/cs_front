@@ -1,8 +1,10 @@
 <template>
     <div>
-        <b-navbar type="is-primary">
+        <b-navbar>
             <template slot="brand">
-                <b-navbar-item tag="router-link" :to="{ path: '/' }">CSMAKER</b-navbar-item>
+                <b-navbar-item tag="router-link" :to="{ path: '/' }">
+                    <img src="/logo.png" alt="Cheat Sheet Maker">
+                </b-navbar-item>
             </template>
             <template slot="end">
                 <b-navbar-item tag="div">
