@@ -1,31 +1,38 @@
 <template>
-    <div class="modal-card">
-        <header class="modal-card-head">
-            <div class="modal-card-title">
-                <ce elm="h1" class="title is-4" v-model="data.title" placeholder="Sheet title"></ce>
+    <section>
+        <b-field>
+            <ce elm="h1" class="title" v-model="data.title" placeholder="Sheet title"></ce>
+        </b-field>
+        <b-field label="Description">
+            <editor v-model="data.description"></editor>
+        </b-field>
+        <div class="level is-mobile">
+            <div class="level-left">
+                <h4 class="title is-6">Rows</h4>
             </div>
-            <div class="modal-card-icon">
-                <div class="button is-text" @click="addRow">Add</div>
+            <div class="level-right">
+                <div class="button" @click="addRow">
+                    <b-icon icon="plus"></b-icon>
+                    <span>Add</span>
+                </div>
             </div>
-        </header>
-        <section class="modal-card-body">
-            <b-field label-position="on-border" label="Description">
-                <editor v-model="data.description"></editor>
+        </div>
+        <div class="data-elm" v-for="(row, i) in data.rows" :key="i">
+            <div class="media">
+                <div class="media-content">
+                    <b-field label-position="on-border" label="Label">
+                        <editor :value="row.label" @input="row.label = $event"/>
+                    </b-field>
+                </div>
+                <div class="media-right">
+                    <div class="delete" @click="data.rows.splice(i, 1)"></div>
+                </div>
+            </div>
+            <b-field label-position="on-border" label="Value">
+                <editor :value="row.value" @input="row.value = $event"/>
             </b-field>
-            <h4 class="title is-6">Rows</h4>
-            <div class="data-elm" v-for="(row, i) in data.rows" :key="i">
-                <b-field label-position="on-border" label="Label">
-                    <editor :value="row.label" @input="row.label = $event"/>
-                </b-field>
-                <b-field label-position="on-border" label="Value">
-                    <editor :value="row.value" @input="row.value = $event"/>
-                </b-field>
-            </div>
-        </section>
-        <footer class="modal-card-foot">
-            <button class="button is-primary is-fullwidth" @click="$emit('done')">Done</button>
-        </footer>
-    </div>
+        </div>
+    </section>
 </template>
 
 <script>
@@ -58,8 +65,11 @@
             }
         },
         watch: {
-            value() {
-                this.data = this.value;
+            value: {
+                deep: true,
+                handler: function () {
+                    this.data = this.value;
+                }
             },
             data: {
                 deep: true,

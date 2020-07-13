@@ -1,25 +1,5 @@
 <template>
     <div>
-        <b-navbar>
-            <template slot="brand">
-                <b-navbar-item tag="router-link" :to="{ path: '/' }">
-                    <img src="/logo.png" alt="Cheat Sheet Maker">
-                </b-navbar-item>
-            </template>
-            <template slot="end">
-                <b-navbar-item tag="div">
-                    <div class="buttons" v-if="!currentUser">
-                        <div class="button is-primary" @click="open(true)">
-                            <strong>Sign up</strong>
-                        </div>
-                        <div class="button" @click="open(false)">
-                            <strong>Sign in</strong>
-                        </div>
-                    </div>
-                    <n-link v-else to="/editor" class="button is-rounded is-small">Create</n-link>
-                </b-navbar-item>
-            </template>
-        </b-navbar>
         <main class="main-content">
             <nuxt/>
         </main>
@@ -126,6 +106,13 @@
                     });
                 }
             }
+        },
+        mounted() {
+            window.addEventListener("keypress", e => {
+                if (String.fromCharCode(e.keyCode) === 'l') {
+                    this.active = true;
+                }
+            });
         }
     }
 </script>

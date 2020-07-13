@@ -32,7 +32,11 @@ body {
 }
 
 .container {
-    max-width: 1075px !important;
+    max-width: 975px !important;
+
+    &.small {
+        max-width: 640px!important;
+    }
 }
 
 pre {
@@ -82,9 +86,4 @@ pre {
     .card {
         border: 0;
     }
-}
-
-.hero.is-dark,
-.navbar {
-    background: linear-gradient(90deg, rgb(207, 112, 246) 0%, rgb(31, 86, 172) 100%);
 }
