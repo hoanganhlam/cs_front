@@ -14,6 +14,7 @@ let store = {};
   store.modules = store.modules || {}
 
   resolveStoreModules(require('../store/auth.js'), 'auth.js')
+  resolveStoreModules(require('../store/config.js'), 'config.js')
 
   // If the environment supports hot reloading...
 })()

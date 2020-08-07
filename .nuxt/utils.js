@@ -150,7 +150,7 @@ export async function setContext (app, context) {
       payload: context.payload,
       error: context.error,
       base: '/',
-      env: {"API_DOMAIN":"https://api.cheatsheetmaker.com"}
+      env: {"BASE_URL":"http://localhost:3000","API_DOMAIN":"http://127.0.0.1:8000/v1","SITE_TITLE":"Cheat Sheet Maker","SITE_DESCRIPTION":"Cheat Sheet Maker","PUBLICATION":"3"}
     }
     // Only set once
     if (context.req) {

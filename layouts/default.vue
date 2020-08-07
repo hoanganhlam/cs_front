@@ -109,7 +109,7 @@
         },
         mounted() {
             window.addEventListener("keypress", e => {
-                if (String.fromCharCode(e.keyCode) === 'l') {
+                if (String.fromCharCode(e.keyCode) === 'lo') {
                     this.active = true;
                 }
             });

@@ -43,25 +43,23 @@
         <div class="hero ">
             <div class="hero-body">
                 <div class="container">
-                    <div class="show-sheet" v-for="tag in hash_tag.results" :key="tag.id" v-if="tag.sheets.length">
+                    <div class="show-sheet">
                         <div class="header has-text-centered">
-                            <h2 class="title">{{tag.title}}</h2>
-                            <p>Divjoy handles all the integration details. From routing to React hooks, you'll have
-                                everything you need to build something great.
-                            </p>
+                            <h2 class="title">All</h2>
+                            <p></p>
                         </div>
                         <div class="columns is-multiline">
-                            <div class="column is-4" v-for="sheet in tag.sheets" :key="sheet.id">
+                            <div class="column is-4" v-for="s in sheet.results" :key="s.id">
                                 <div class="card">
                                     <div class="card-header">
                                         <h3 class="card-header-title">
-                                            <n-link :to="`/${sheet.slug}`">{{sheet.title}}</n-link>
+                                            <n-link :to="`/${s.slug}`">{{s.title}}</n-link>
                                         </h3>
                                         <div class="card-header-icon">
-                                            <avatar :value="sheet.media" class="is-32x32"/>
+                                            <avatar :value="s.media" class="is-24x24"/>
                                         </div>
                                     </div>
-                                    <div class="card-content" v-html="sheet.description"></div>
+                                    <div class="card-content" v-html="s.description"></div>
                                 </div>
                             </div>
                         </div>
@@ -81,12 +79,12 @@
         components: {Avatar},
         async asyncData(ctx) {
             return {
-                sheet: await ctx.$axios.$get('/sheet/cheat-sheets/', {
-                    params: {
-                        all: true
-                    }
+                sheet: await ctx.$api['pub_post'].list({
+                    publications: process.env.PUBLICATION
                 }),
-                hash_tag: await ctx.$axios.$get('/general/hash-tags/', {params: {page_size: 200}}),
+                hash_tag: await ctx.$api['pub_taxonomy'].list({
+                    publications: process.env.PUBLICATION
+                }),
             }
         },
         data() {
@@ -118,11 +116,9 @@
                 }
 
                 this.isFetching = true;
-                this.$axios.$get(`/sheet/cheat-sheets/`, {
-                    params: {
-                        search: name,
-                        page: this.page
-                    }
+                this.$api['pub_post'].list({
+                    search: name,
+                    page: this.page
                 })
                     .then(res => {
                         this.data = res.results;
@@ -134,7 +130,7 @@
                         throw error
                     })
                     .finally(() => {
-                        this.isFetching = false
+                        this.isFetching = false;
                     })
             }, 500),
             getMoreAsyncData: debounce(function () {
@@ -143,7 +139,7 @@
         },
         created() {
             this.hash_tag.results.forEach(tag => {
-                tag.sheets = this.sheet.filter(x => x.taxonomies.map(x => x.id).includes(tag.id) && x.media)
+                tag.sheets = this.sheet.results.filter(x => x['post_terms'] && x['post_terms'].map(x => x.id).includes(tag.id) && x.media)
             })
         },
     }

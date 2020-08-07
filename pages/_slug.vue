@@ -7,14 +7,15 @@
                         <b-icon icon="chevron-left"></b-icon>
                         <span>Back to home</span>
                     </n-link>
-                    <avatar v-if="updating || data.media" v-model="data.media" class="is-96x96" :can-update="updating" style="margin: 0 auto"/>
+                    <avatar v-if="updating || data.media" v-model="data.media" class="is-96x96" :can-update="updating"
+                            style="margin: 0 auto"/>
                     <ce elm="h1" :editable="updating" class="title is-1" placeholder="Title" v-model="data.title"></ce>
                     <div v-if="!updating" class="subtitle" v-html="data.description"></div>
                     <editor v-else :value="data.description" @input="data.description = $event"
                             placeholder="Description"/>
                     <b-field v-if="updating">
                         <b-taginput
-                            v-model="data.taxonomies"
+                            v-model="data['post_terms']"
                             :data="taxonomy.results"
                             autocomplete
                             :allow-new="true"
@@ -42,7 +43,7 @@
                 </div>
             </div>
         </div>
-        <div class="hero sheet-detail" v-for="(sheet, i) in data.sheets" :key="sheet.id">
+        <div class="hero sheet-detail" v-for="(sheet, i) in data['meta'].sheets" :key="sheet.id">
             <div class="hero-body">
                 <div class="container small content">
                     <div class="level">
@@ -139,16 +140,19 @@
             SheetForm,
             Avatar
         },
-        async asyncData({$axios, params}) {
+        async asyncData({$api, params}) {
             let data = DEFAULT;
             let updating = false;
             if (params.slug && params.slug !== 'editor') {
-                data = await $axios.$get(`/sheet/cheat-sheets/${params.slug}/`);
+                data = await $api['pub_post'].get(params.slug);
             } else {
                 updating = true;
             }
-            if (data.taxonomies === null) {
-                data.taxonomies = [];
+            if (data['post_terms'] === null) {
+                data['post_terms'] = [];
+            }
+            if (data['meta'] === null) {
+                data['meta'] = {sheets: []};
             }
             return {
                 data,
@@ -157,6 +161,14 @@
         },
         head() {
             return {
+                script: [
+                    {
+                        src: 'https://cdn.ckeditor.com/ckeditor5/21.0.0/classic/ckeditor.js'
+                    },
+                    {
+                        src: 'https://unpkg.com/turndown/dist/turndown.js'
+                    }
+                ],
                 title: this.$route.params.slug === 'editor' ? 'Editor' : this.data.title
             }
         },
@@ -172,15 +184,15 @@
         },
         methods: {
             addSheet() {
-                this.data.sheets.push({
+                this.data['meta'].sheets.push({
                     id: this.generateId(),
                     ...cloneDeep(DEFAULT_SHEET)
                 });
-                this.activeSheet = this.data.sheets[this.data.sheets.length - 1];
+                this.activeSheet = this.data['meta'].sheets[this.data['meta'].sheets.length - 1];
                 this.active = true;
             },
             updateSheet(index) {
-                this.activeSheet = this.data.sheets[index];
+                this.activeSheet = this.data['meta'].sheets[index];
                 this.active = true;
             },
             handleUpdate() {
@@ -192,20 +204,18 @@
             },
             async save() {
                 let data = cloneDeep(this.data);
-                data.media = data.media ? data.media.id : undefined;
-                data.taxonomies = data.taxonomies ? data.taxonomies.map(x => x.id) : [];
-                if (this.data.id) {
-                    await this.$axios.$put(`/sheet/cheat-sheets/${this.data.slug}/`, data);
-                } else {
-                    let res = await this.$axios.$post(`/sheet/cheat-sheets/`, data);
-                    this.$router.replace({path: '/' + res.slug});
-                }
+                data['options'].media = data['options'].media ? data['options'].media.id : undefined;
+                data['post_terms'] = data['post_terms'] ? data['post_terms'].map(x => x.id) : [];
+                // if (this.data.id) {
+                //     await this.$axios.$put(`/sheet/cheat-sheets/${this.data.slug}/`, data);
+                // } else {
+                //     let res = await this.$axios.$post(`/sheet/cheat-sheets/`, data);
+                //     this.$router.replace({path: '/' + res.slug});
+                // }
                 this.updating = false;
             },
             getQuerySet: debounce(function (text) {
-                this.$axios.$get('/general/hash-tags/', {
-                    params: {search: text}
-                }).then(res => {
+                this.$api['term_taxonomy'].list({search: text}).then(res => {
                     this.taxonomy = res;
                 })
             }, 500),
@@ -219,13 +229,11 @@
                 }
             },
             beforeAdding(tag) {
-                let check = this.data.taxonomies.map(x => x.id).indexOf(tag.id);
+                let check = this.data['post_terms'].map(x => x.id).indexOf(tag.id);
                 return check === -1;
             },
             getTagQuerySet: debounce(function (text) {
-                this.$axios.$get('/general/hash-tags/', {
-                    params: {search: text}
-                }).then(res => {
+                this.$api['pub_taxonomy'].list('/general/hash-tags/', {search: text}).then(res => {
                     this.taxonomy = res;
                 })
             }, 500),
