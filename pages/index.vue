@@ -53,7 +53,7 @@
                                 <div class="card">
                                     <div class="card-header">
                                         <h3 class="card-header-title">
-                                            <n-link :to="`/${s.slug}`">{{s.title}}</n-link>
+                                            <n-link :to="`/${s.slug}`">{{ s.title }}</n-link>
                                         </h3>
                                         <div class="card-header-icon">
                                             <avatar :value="s.media" class="is-24x24"/>
@@ -71,118 +71,118 @@
 </template>
 
 <script>
-    import Avatar from "../components/Avatar";
-    import debounce from 'lodash/debounce';
+import Avatar from "../components/Avatar";
+import debounce from 'lodash/debounce';
 
-    export default {
-        name: "index",
-        components: {Avatar},
-        async asyncData(ctx) {
-            return {
-                sheet: await ctx.$api['pub_post'].list({
-                    publications: process.env.PUBLICATION
-                }),
-                hash_tag: await ctx.$api['pub_taxonomy'].list({
-                    publications: process.env.PUBLICATION
-                }),
+export default {
+    name: "index",
+    components: {Avatar},
+    async asyncData(ctx) {
+        return {
+            sheet: await ctx.$api['post'].list({
+                publication: process.env.PUBLICATION
+            }),
+            hash_tag: await ctx.$api['taxonomy'].list({
+                publication: process.env.PUBLICATION
+            }),
+        }
+    },
+    data() {
+        return {
+            data: [],
+            isFetching: false,
+            name: '',
+            page: 1,
+            totalPages: 1
+        }
+    },
+    methods: {
+        getAsyncData: debounce(function (name) {
+            if (this.name !== name) {
+                this.name = name;
+                this.data = [];
+                this.page = 1;
             }
-        },
-        data() {
-            return {
-                data: [],
-                isFetching: false,
-                name: '',
-                page: 1,
-                totalPages: 1
+
+            if (!name.length) {
+                this.data = [];
+                this.page = 1;
+                this.totalPages = 1;
+                return;
             }
-        },
-        methods: {
-            getAsyncData: debounce(function (name) {
-                if (this.name !== name) {
-                    this.name = name;
-                    this.data = [];
-                    this.page = 1;
-                }
 
-                if (!name.length) {
-                    this.data = [];
-                    this.page = 1;
-                    this.totalPages = 1;
-                    return;
-                }
+            if (this.page > this.totalPages) {
+                return;
+            }
 
-                if (this.page > this.totalPages) {
-                    return;
-                }
-
-                this.isFetching = true;
-                this.$api['pub_post'].list({
-                    search: name,
-                    page: this.page
-                })
-                    .then(res => {
-                        this.data = res.results;
-                        this.page++;
-                        this.totalPages = res['num_pages'];
-                    })
-                    .catch((error) => {
-                        this.data = [];
-                        throw error
-                    })
-                    .finally(() => {
-                        this.isFetching = false;
-                    })
-            }, 500),
-            getMoreAsyncData: debounce(function () {
-                this.getAsyncData(this.name);
-            }, 250)
-        },
-        created() {
-            this.hash_tag.results.forEach(tag => {
-                tag.sheets = this.sheet.results.filter(x => x['post_terms'] && x['post_terms'].map(x => x.id).includes(tag.id) && x.media)
+            this.isFetching = true;
+            this.$api['pub_post'].list({
+                search: name,
+                page: this.page
             })
-        },
-    }
+                .then(res => {
+                    this.data = res.results;
+                    this.page++;
+                    this.totalPages = res['num_pages'];
+                })
+                .catch((error) => {
+                    this.data = [];
+                    throw error
+                })
+                .finally(() => {
+                    this.isFetching = false;
+                })
+        }, 500),
+        getMoreAsyncData: debounce(function () {
+            this.getAsyncData(this.name);
+        }, 250)
+    },
+    created() {
+        this.hash_tag.results.forEach(tag => {
+            tag.sheets = this.sheet.results.filter(x => x['post_terms'] && x['post_terms'].map(x => x.id).includes(tag.id) && x.media)
+        })
+    },
+}
 </script>
 
 <style lang="scss">
-    .widget_title {
-        font-weight: bold;
+.widget_title {
+    font-weight: bold;
 
-        &:not(:last-child) {
-            margin-bottom: 1rem;
-        }
+    &:not(:last-child) {
+        margin-bottom: 1rem;
+    }
+}
+
+.show-sheet {
+    .header {
+        margin-bottom: 1.5rem;
     }
 
-    .show-sheet {
-        .header {
-            margin-bottom: 1.5rem;
-        }
+    .card {
+        box-shadow: none;
+        border: 1px solid rgb(234, 231, 237);
+        background-color: rgb(250, 248, 252);
+        height: 100%;
 
-        .card {
+        .card-header {
+            background-color: white;
             box-shadow: none;
-            border: 1px solid rgb(234, 231, 237);
-            background-color: rgb(250, 248, 252);
-            height: 100%;
-
-            .card-header {
-                background-color: white;
-                box-shadow: none;
-                border-bottom: 1px solid rgb(234, 231, 237);
-            }
-
-            .card-content {
-                padding: 1rem;
-            }
-
-            .image img {
-                object-fit: cover;
-            }
+            border-bottom: 1px solid rgb(234, 231, 237);
         }
 
-        &:not(:last-child) {
-            margin-bottom: 1.5rem;
+        .card-content {
+            padding: 1rem;
+        }
+
+        .image img {
+            object-fit: cover;
         }
     }
+
+    &:not(:last-child) {
+        margin-bottom: 1.5rem;
+    }
+}
 
 </style>

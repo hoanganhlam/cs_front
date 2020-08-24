@@ -53,7 +53,7 @@ export default async function (context, inject) {
     const init = async () => {
         let token = await getToken();
         await setToken(token);
-        let publication = await context.$axios.$get(`/cms/publications/${process.env.PUBLICATION}/`);
+        let publication = await context.$axios.$get(`/cms-private/publications/${process.env.PUBLICATION}/`);
         await context.store.commit('config/SET_PUBLICATION', publication);
         if (token) {
             let user = await getUser();

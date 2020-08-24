@@ -77,34 +77,24 @@ const apis_module = [
         name: 'media',
         methods: []
     },
+    // New
     {
-        space: 'cms',
-        endpoint: 'publications',
-        name: 'publication',
-        methods: []
-    },
-    {
-        space: 'cms',
+        space: `pub-${process.env.PUBLICATION}`,
         endpoint: 'posts',
         name: 'post',
-        methods: []
+        methods: [
+            {
+                hasId: true,
+                endpoint: 'comments',
+                name: 'comment',
+                method: '$get'
+            }
+        ]
     },
     {
-        space: 'cms',
-        endpoint: 'term-taxonomies',
-        name: 'term_taxonomy',
-        methods: []
-    },
-    {
-        space: 'global-cms',
+        space: `pub-${process.env.PUBLICATION}`,
         endpoint: 'taxonomies',
-        name: 'pub_taxonomy',
-        methods: []
-    },
-    {
-        space: 'global-cms',
-        endpoint: 'posts',
-        name: 'pub_post',
+        name: 'taxonomy',
         methods: []
     }
 ];

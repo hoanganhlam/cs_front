@@ -144,7 +144,7 @@
             let data = DEFAULT;
             let updating = false;
             if (params.slug && params.slug !== 'editor') {
-                data = await $api['pub_post'].get(params.slug);
+                data = await $api['post'].get(params.slug);
             } else {
                 updating = true;
             }
