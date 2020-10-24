@@ -1,81 +1,61 @@
 <template>
     <div class="content">
-        <div ref="editor"></div>
+        <tiny-editor v-model="editorData"
+                     api-key="sgdhe7czf3wgmsipn054ql44mi1ce2khbevpw9atwsq3ir1q"
+                     :init="editorConfig"/>
     </div>
 </template>
 
 <script>
-    export default {
-        name: "Editor",
-        props: {
-            value: {},
-            placeholder: {},
-            changed: {}
-        },
-        data() {
-            return {
-                editor: null,
-                editorData: this.value,
-                editorConfig: {},
-                turnDown: null
-            };
-        },
-        methods: {},
-        mounted() {
-            if (process.client) {
-                if (typeof BalloonEditor !== 'undefined' && typeof TurndownService !== 'undefined') {
-                    BalloonEditor
-                        .create(this.$refs['editor'], {
-                            toolbar: ['heading', '|', 'bold', 'italic', 'link', 'bulletedList', 'numberedList', 'blockQuote'],
-                            heading: {
-                                options: [
-                                    {model: 'paragraph', title: 'Paragraph', class: 'ck-heading_paragraph'},
-                                    {model: 'heading1', view: 'h1', title: 'Heading 1', class: 'ck-heading_heading1'},
-                                    {model: 'heading2', view: 'h2', title: 'Heading 2', class: 'ck-heading_heading2'}
-                                ]
-                            },
-                        })
-                        .then(editor => {
-                            this.editor = editor;
-                            if (this.value) {
-                                this.editor.setData(this.toHTML(this.value));
-                            } else {
-                                this.editor.setData(this.toHTML('Write something...'));
-                            }
-                        })
-                        .catch(error => {
-                            // console.error(error);
-                        });
-                    this.$refs['editor'].parentElement.addEventListener('change', () => {
-                        this.handleInput()
-                    });
-                    this.turnDown = new TurndownService();
-                }
-            }
-        },
-        computed: {
-            data() {
-                return this.editor ? this.editor.getData() : null;
-            }
-        },
-        watch: {
-            data() {
-                if (this.turnDown) {
-                    this.$emit('input', this.turnDown.turndown(this.data));
-                }
+import Editor from '@tinymce/tinymce-vue';
+import TurnDownService from "turndown";
+
+const turndown = new TurnDownService;
+export default {
+    name: "Editor",
+    components: {
+        'tiny-editor': Editor
+    },
+    props: {
+        value: {},
+        placeholder: {},
+        changed: {}
+    },
+    data() {
+        return {
+            editor: null,
+            editorData: null,
+            editorConfig: {
+                height: 150,
+                menubar: false,
+                plugins: [
+                    'advlist autolink lists link image charmap print preview anchor',
+                    'searchreplace visualblocks code fullscreen',
+                    'insertdatetime media table paste code help wordcount'
+                ],
+                toolbar:
+                    'undo redo | formatselect | bold italic backcolor | \
+                    alignleft aligncenter alignright alignjustify | \
+                    bullist numlist outdent indent | removeformat | help'
             },
-            changed() {
-                if (this.editor) {
-                    this.editor.setData(this.toHTML(this.value));
-                }
-            }
+            turnDown: null
+        };
+    },
+    methods: {},
+    watch: {
+        editorData() {
+            this.$emit('input', turndown.turndown(this.editorData));
+        },
+        changed() {
+            this.editorData = this.toHTML(this.value);
         }
+    },
+    created() {
+        this.editorData = this.toHTML(this.value);
     }
+}
 </script>
 
-<style lang="scss">
-    .ck-content {
-        margin-left: -9.6px;
-        margin-right: -9.6px;
-    }
+<style scoped>
+
 </style>

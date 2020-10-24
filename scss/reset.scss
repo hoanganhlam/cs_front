@@ -87,3 +87,7 @@ pre {
         border: 0;
     }
 }
+
+.columns.is-variable .column {
+    padding: var(--columnGap);
+}

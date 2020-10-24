@@ -2,3 +2,13 @@
 @import "variable";
 @import "~bulma/bulma";
 @import "reset";
+
+@media screen and (max-width: 768px) {
+    .media-content {
+        overflow-x: unset;
+    }
+}
+
+.footer {
+    margin-top: 1.5rem;
+}

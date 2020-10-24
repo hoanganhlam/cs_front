@@ -1,6 +1,8 @@
 import Vue from "vue";
 import ContentEditable from "../components/ContentEditable";
 
+const showdown = require('showdown');
+const converter = new showdown.Converter();
 Vue.component('ce', ContentEditable);
 Vue.mixin({
     methods: {
@@ -20,6 +22,9 @@ Vue.mixin({
                 return 'Anonymous';
             }
         },
+        toHTML(val) {
+            return val ? converter.makeHtml(val) : '';
+        }
     },
     computed: {
         currentUser: {

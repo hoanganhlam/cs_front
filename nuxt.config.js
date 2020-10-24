@@ -3,8 +3,6 @@ require('dotenv').config();
 export default {
     mode: 'universal',
     env: {
-        BASE_URL: process.env.BASE_URL || 'https://vuerepository.com',
-        API_DOMAIN: process.env.API_DOMAIN || 'https://expo.bubblask.com',
         SITE_TITLE: process.env.SITE_TITLE || 'Cheat Sheet Maker',
         SITE_DESCRIPTION: process.env.SITE_DESCRIPTION || 'Cheat Sheet Maker',
         PUBLICATION: process.env.PUBLICATION || 3

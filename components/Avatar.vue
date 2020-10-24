@@ -37,7 +37,7 @@
                 type: String
             },
             size: {
-                default: 'thumb_24_24'
+                default: 'thumb_247_247'
             }
         },
         data() {

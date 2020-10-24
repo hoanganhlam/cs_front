@@ -1,6 +1,6 @@
 <template>
     <div class="is-fullheight">
-        <div class="hero">
+        <div class="hero is-dark">
             <div class="hero-body">
                 <div class="container small has-text-centered">
                     <h1 class="title is-1">Cheat Sheet Maker</h1>
@@ -40,15 +40,15 @@
                 </div>
             </div>
         </div>
-        <div class="hero ">
+        <div class="hero">
             <div class="hero-body">
                 <div class="container">
                     <div class="show-sheet">
                         <div class="header has-text-centered">
-                            <h2 class="title">All</h2>
+                            <h2 class="title">New</h2>
                             <p></p>
                         </div>
-                        <div class="columns is-multiline">
+                        <div class="columns is-variable is-2 is-multiline">
                             <div class="column is-4" v-for="s in sheet.results" :key="s.id">
                                 <div class="card">
                                     <div class="card-header">
