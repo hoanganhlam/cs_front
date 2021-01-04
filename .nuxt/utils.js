@@ -150,7 +150,7 @@ export async function setContext (app, context) {
       payload: context.payload,
       error: context.error,
       base: '/',
-      env: {"SITE_TITLE":"Cheat Sheet Maker","SITE_DESCRIPTION":"Cheat Sheet Maker","PUBLICATION":"3","BASE_URL":"http://localhost:3000","API_DOMAIN":"https://cms.fournalist.com/v1"}
+      env: {"SITE_TITLE":"Cheat Sheet Maker","SITE_DESCRIPTION":"Cheat Sheet Maker","PUBLICATION":"3","BASE_URL":"http://localhost:3000","API_DOMAIN":"https://api.fournalist.com/v1"}
     }
     // Only set once
     if (context.req) {

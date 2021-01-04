@@ -2,7 +2,7 @@
     <div class="is-fullheight">
         <div class="hero is-dark">
             <div class="hero-body">
-                <div class="container small has-text-centered">
+                <div class="container small">
                     <h1 class="title is-1">Cheat Sheet Maker</h1>
                     <p class="subtitle">A cheat sheet (also cheatsheet) or crib sheet is a concise set of notes used for
                         quick reference.</p>

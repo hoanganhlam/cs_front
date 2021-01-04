@@ -136,8 +136,8 @@ const setupProgress = (axios) => {
 export default (ctx, inject) => {
   // baseURL
   const baseURL = process.browser
-      ? 'https://cms.fournalist.com/v1'
-      : (process.env._AXIOS_BASE_URL_ || 'https://cms.fournalist.com/v1')
+      ? 'https://api.fournalist.com/v1'
+      : (process.env._AXIOS_BASE_URL_ || 'https://api.fournalist.com/v1')
 
   // Create fresh objects for all default header scopes
   // Axios creates only one which is shared across SSR requests!
